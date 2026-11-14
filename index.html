@@ -66,7 +66,7 @@
     <header>
       <h1>Sascha Wolfer</h1>
       <p class="affil">Researcher at the <a href="https://www.ids-mannheim.de" target="_blank" rel="noopener noreferrer">Leibniz-Institut für Deutsche Sprache (IDS)</a><br>
-      I am currently an <a href="https://www.ids-mannheim.de/org/gremien/ombud/" target="_blank" rel="noopener noreferrer">Ombudsperson</a> at the IDS.</p>
+      I am currently an <a href="https://www.ids-mannheim.de/org/gremien/ombud/" target="_blank" rel="noopener noreferrer">Ombudsperson</a> at the IDS</p>
     </header>
 
     <section aria-labelledby="interests">
@@ -196,6 +196,10 @@
   }
   const TYPES = { article: "Journal article", incollection: "Book chapter", inbook: "Book chapter",
                   inproceedings: "Conference paper", conference: "Conference paper", book: "Book" };
+  function edSuffix(e) {
+    if (e.author || !e.editor) return "";
+    return e.editor.split(/\s+and\s+/).length > 1 ? " (Eds.)" : " (Ed.)";
+  }
   const isIds = u => /ids-pub\.bsz/i.test(u || "");
   function doiUrl(e) {
     return e.doi ? "https://doi.org/" + e.doi.replace(/^https?:\/\/(dx\.)?doi\.org\//, "") : "";
@@ -216,7 +220,7 @@
           .map(([h, l]) => `<a class="btn" href="${esc(h)}" target="_blank" rel="noopener noreferrer">${l}</a>`).join("");
         const typ = p.type ? `<span class="type">${esc(p.type)}</span>` : "";
         const btn = typ || btns ? `<div class="actions">${typ}${btns}</div>` : "";
-        return `<li><span class="title">${esc(p.title)}</span><br><span class="meta">${esc(p.authors)}${p.venue ? ". " + esc(p.venue) : ""}</span>${btn}</li>`;
+        return `<li><span class="title">${esc(p.title)}</span><br><span class="meta">${esc(p.authors)}${p.venue ? (/[.!?]$/.test(p.authors) ? " " : ". ") + esc(p.venue) : ""}</span>${btn}</li>`;
       }).join("") + `</ul></div>`
     ).join("") : `<p class="empty">No publications match your search. Try fewer or different words.</p>`;
     count.textContent = vis.length < hits.length
@@ -229,7 +233,7 @@
     .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
     .then(txt => {
       PUBS = parseBib(txt).map(e => {
-        const p = { year: e.year || "n.d.", title: e.title || e.key, authors: authors(e.author || e.editor), venue: venue(e), type: TYPES[e.etype] || "", doi: doiUrl(e), ids: e.idsurl || (isIds(e.url) ? e.url : ""), url: isIds(e.url) ? "" : (e.url || "") };
+        const p = { year: e.year || "n.d.", title: e.title || e.key, authors: authors(e.author || e.editor) + edSuffix(e), venue: venue(e), type: (!e.author && e.editor) ? "Edited" : (TYPES[e.etype] || ""), doi: doiUrl(e), ids: e.idsurl || (isIds(e.url) ? e.url : ""), url: isIds(e.url) ? "" : (e.url || "") };
         p.hay = [p.year, p.title, p.authors, p.venue, p.type, e.keywords || ""].join(" ").toLowerCase();
         return p;
       });
