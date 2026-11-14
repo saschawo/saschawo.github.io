@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sascha Wolfer – Corpus Linguistics</title>
+<meta name="description" content="Personal academic website of Sascha Wolfer: corpus linguistics, construction grammar, lexical productivity.">
+<style>
+  :root {
+    --bg: #fbfbfa; --fg: #1d2127; --muted: #5d6670; --line: #dcdfe3; --accent: #1b5e7a;
+    --serif: Charter, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #16191d; --fg: #e4e7ea; --muted: #a0a8b0; --line: #343a41; --accent: #7cc0dc; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 1.0625rem/1.6 var(--serif); }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .page { max-width: 62rem; margin: 0 auto; padding: 3rem 1.5rem 4rem; display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: 3.5rem; }
+  h1 { font: 600 1.9rem/1.2 var(--serif); margin: 0 0 .25rem; }
+  .affil { color: var(--muted); margin: 0 0 2.5rem; }
+  main h2 { font: 600 1.35rem var(--serif); margin: 0 0 1rem; }
+  .intro { margin: 0 0 2.5rem; max-width: 40rem; }
+  .contact { margin: 0 0 2.5rem; font-family: var(--sans); font-size: .95rem; }
+  .contact h2 { font: 600 1.35rem var(--serif); }
+  .contact p { margin: 0; }
+
+  aside { font-family: var(--sans); font-size: .95rem; }
+  .photo { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 3px; background: var(--line); display: block; }
+  .links { list-style: none; margin: 1.25rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+  .links a { display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; color: var(--fg); }
+  .links a:hover span { text-decoration: underline; text-underline-offset: 3px; }
+  .links svg { width: 1.35rem; height: 1.35rem; flex: none; color: var(--accent); }
+
+  .search { width: 100%; max-width: 26rem; font: .95rem var(--sans); padding: .55rem .75rem; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 4px; }
+  .count { font: .85rem var(--sans); color: var(--muted); margin: .5rem 0 1.5rem; }
+  .year { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: 1rem; padding: 1.1rem 0; border-top: 1px solid var(--line); }
+  .year h3 { font: 600 1rem var(--sans); margin: 0; color: var(--muted); }
+  .year ul { list-style: none; margin: 0; padding: 0; }
+  .year li { margin-bottom: 1rem; }
+  .year li:last-child { margin-bottom: 0; }
+  .title { font-weight: 600; }
+  .meta { color: var(--muted); font-size: .95rem; }
+  .empty { font-family: var(--sans); color: var(--muted); }
+  footer { grid-column: 1 / -1; border-top: 1px solid var(--line); padding-top: 1rem; font: .85rem var(--sans); color: var(--muted); }
+  @media (max-width: 52rem) {
+    .page { grid-template-columns: 1fr; gap: 2rem; padding-top: 2rem; }
+    aside { order: -1; max-width: 15rem; }
+  }
+  @media (max-width: 30rem) { .year { grid-template-columns: 1fr; gap: .25rem; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <main>
+    <header>
+      <h1>Sascha Wolfer</h1>
+      <p class="affil">[Position], [Department, Institution], [City], Germany</p>
+    </header>
+
+    <section aria-labelledby="interests">
+      <h2 id="interests">Research interests</h2>
+      <p class="intro">
+        Quantitative corpus linguistics, construction grammar, lexical productivity and frequency
+        distributions, and language for specific purposes. I work mainly with German corpus data and R.
+      </p>
+    </section>
+
+    <section class="contact" aria-labelledby="contact">
+      <h2 id="contact">Contact</h2>
+      <p><a href="mailto:you@example.org">you@example.org</a><br>[Office address or room]</p>
+    </section>
+
+    <section aria-labelledby="pubs">
+      <h2 id="pubs">Publications</h2>
+      <label for="q" hidden>Search publications</label>
+      <input id="q" class="search" type="search" placeholder="Search by title, author, venue or year" autocomplete="off">
+      <p id="count" class="count" aria-live="polite">Loading publications…</p>
+      <div id="list"></div>
+    </section>
+  </main>
+
+  <aside>
+    <!-- Place your portrait next to this file as photo.jpg (portrait format, ideally 3:4) -->
+    <img class="photo" src="photo.jpg" alt="Portrait of Sascha Wolfer" width="240" height="320">
+    <ul class="links">
+      <li><a href="https://orcid.org/0000-0000-0000-0000" rel="me">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentColor"/><text x="12" y="16" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#fff">iD</text></svg>
+        <span>ORCID</span></a></li>
+      <li><a href="https://example.social/@saschawo" rel="me">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="6" fill="currentColor"/><text x="12" y="17" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#fff">m</text></svg>
+        <span>Fediverse</span></a></li>
+      <li><a href="https://bsky.app/profile/your-handle.bsky.social" rel="me">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"/></svg>
+        <span>Bluesky</span></a></li>
+      <li><a href="https://github.com/saschawo" rel="me">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        <span>GitHub</span></a></li>
+    </ul>
+  </aside>
+
+  <footer>© <span id="y"></span> Sascha Wolfer</footer>
+</div>
+
+<script>
+  const BIB_FILE = "publications.bib";   // lives next to index.html
+  const list = document.getElementById("list");
+  const count = document.getElementById("count");
+  const q = document.getElementById("q");
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  /* ---- minimal BibTeX parser ---- */
+  const ACCENTS = { '"': { a:"ä", o:"ö", u:"ü", A:"Ä", O:"Ö", U:"Ü", e:"ë", i:"ï" },
+                    "'": { a:"á", e:"é", i:"í", o:"ó", u:"ú", E:"É" },
+                    "`": { a:"à", e:"è", u:"ù" }, "^": { a:"â", e:"ê", o:"ô" } };
+  function clean(s) {
+    return s
+      .replace(/\\(["'`^])\s*\{?(\w)\}?/g, (m, acc, ch) => (ACCENTS[acc] && ACCENTS[acc][ch]) || ch)
+      .replace(/\\ss\b\s*/g, "ß").replace(/\\&/g, "&").replace(/\\_/g, "_").replace(/--/g, "–")
+      .replace(/[{}]/g, "").replace(/\s+/g, " ").trim();
+  }
+  function parseBib(text) {
+    const entries = [];
+    const head = /@(\w+)\s*\{\s*([^,\s]+)\s*,/g;
+    let m;
+    while ((m = head.exec(text))) {
+      const type = m[1].toLowerCase();
+      if (["comment", "string", "preamble"].includes(type)) continue;
+      let i = head.lastIndex, depth = 1, start = i;
+      for (; i < text.length && depth > 0; i++) {
+        if (text[i] === "{") depth++; else if (text[i] === "}") depth--;
+      }
+      const body = text.slice(start, i - 1);
+      head.lastIndex = i;
+      const fields = { type, key: m[2] };
+      const f = /(\w+)\s*=\s*/g;
+      let fm;
+      while ((fm = f.exec(body))) {
+        let j = f.lastIndex, val;
+        if (body[j] === "{") {
+          let d = 1, k = j + 1;
+          for (; k < body.length && d > 0; k++) { if (body[k] === "{") d++; else if (body[k] === "}") d--; }
+          val = body.slice(j + 1, k - 1); f.lastIndex = k;
+        } else if (body[j] === '"') {
+          const k = body.indexOf('"', j + 1); val = body.slice(j + 1, k); f.lastIndex = k + 1;
+        } else {
+          const mm = /^[^,\n]*/.exec(body.slice(j)); val = mm[0]; f.lastIndex = j + val.length;
+        }
+        fields[fm[1].toLowerCase()] = clean(val);
+      }
+      entries.push(fields);
+    }
+    return entries;
+  }
+  function initials(first) {
+    return first.split(/[\s-]+/).filter(Boolean).map(p => p[0].toUpperCase() + ".").join(" ");
+  }
+  function authors(s) {
+    if (!s) return "";
+    const names = s.split(/\s+and\s+/).map(a => {
+      const parts = a.split(",").map(x => x.trim());
+      return parts.length > 1 ? `${parts[0]}, ${initials(parts[1])}` : a;
+    });
+    return names.length > 1 ? names.slice(0, -1).join(", ") + " & " + names[names.length - 1] : names[0];
+  }
+  function venue(e) {
+    const v = e.journal || e.booktitle || e.series || e.publisher || e.school || "";
+    const vol = e.volume ? ` ${e.volume}` + (e.number ? `(${e.number})` : "") : "";
+    const pp = e.pages ? `, ${e.pages}` : "";
+    return v ? v + vol + pp : "";
+  }
+  function link(e) {
+    if (e.doi) return "https://doi.org/" + e.doi.replace(/^https?:\/\/(dx\.)?doi\.org\//, "");
+    return e.url || "";
+  }
+
+  /* ---- render ---- */
+  let PUBS = [];
+  function render() {
+    const terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
+    const hits = PUBS.filter(p => terms.every(t => p.hay.includes(t)))
+                     .sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
+    const byYear = new Map();
+    hits.forEach(p => { if (!byYear.has(p.year)) byYear.set(p.year, []); byYear.get(p.year).push(p); });
+    list.innerHTML = hits.length ? [...byYear].map(([year, items]) =>
+      `<div class="year"><h3>${esc(year)}</h3><ul>` + items.map(p => {
+        const t = p.url ? `<a href="${esc(p.url)}">${esc(p.title)}</a>` : esc(p.title);
+        return `<li><span class="title">${t}</span><br><span class="meta">${esc(p.authors)}${p.venue ? ". " + esc(p.venue) : ""}</span></li>`;
+      }).join("") + `</ul></div>`
+    ).join("") : `<p class="empty">No publications match your search. Try fewer or different words.</p>`;
+    count.textContent = `${hits.length} of ${PUBS.length} publications`;
+  }
+
+  fetch(BIB_FILE)
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
+    .then(txt => {
+      PUBS = parseBib(txt).map(e => {
+        const p = { year: e.year || "n.d.", title: e.title || e.key, authors: authors(e.author || e.editor), venue: venue(e), url: link(e) };
+        p.hay = [p.year, p.title, p.authors, p.venue, e.keywords || ""].join(" ").toLowerCase();
+        return p;
+      });
+      render();
+    })
+    .catch(() => { count.textContent = ""; list.innerHTML = `<p class="empty">Could not load ${BIB_FILE}. Open the page through GitHub Pages or a local web server (not as a local file).</p>`; });
+  q.addEventListener("input", render);
+</script>
+</body>
+</html>
