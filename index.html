@@ -40,7 +40,7 @@
 
   .search { width: 100%; max-width: 26rem; font: .95rem var(--sans); padding: .55rem .75rem; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 4px; }
   .count { font: .85rem var(--sans); color: var(--muted); margin: .5rem 0 1.5rem; }
-  .year { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: 1rem; padding: 1.1rem 0; border-top: 1px solid var(--line); }
+  .year { display: grid; grid-template-columns: 4rem minmax(0, 1fr); align-items: baseline; gap: 1rem; padding: 1.1rem 0; border-top: 1px solid var(--line); }
   .year h3 { font: 600 1rem var(--sans); margin: 0; color: var(--muted); }
   .year ul { list-style: none; margin: 0; padding: 0; }
   .year li { margin-bottom: 1rem; }
@@ -135,7 +135,7 @@
   const count = document.getElementById("count");
   const q = document.getElementById("q");
   const more = document.getElementById("more");
-  const PAGE = 10;          // publications shown at first and added per click
+  const PAGE = 25;          // publications shown at first and added per click
   let shown = PAGE;
   document.getElementById("y").textContent = new Date().getFullYear();
 
@@ -191,23 +191,26 @@
     if (!s) return "";
     const names = s.split(/\s+and\s+/).map(a => {
       const parts = a.split(",").map(x => x.trim());
-      return parts.length > 1 ? `${parts[0]}, ${initials(parts[1])}` : a;
+      return parts.length > 1 ? parts[0] : a.trim().split(/\s+/).pop();   // surname only
     });
     return names.length > 1 ? names.slice(0, -1).join(", ") + " & " + names[names.length - 1] : names[0];
   }
   function venue(e) {
-    const v = e.journal || e.booktitle || e.series || e.publisher || e.school || "";
+    const name = e.journal || e.booktitle || e.series || e.publisher || e.school || "";
     const vol = e.volume ? ` ${e.volume}` + (e.number ? `(${e.number})` : "") : "";
     const pp = e.pages ? `, ${e.pages}` : "";
-    return v ? v + vol + pp : "";
+    return { name, rest: name ? vol + pp : "" };
   }
   const TYPES = { article: "Journal article", incollection: "Book chapter", inbook: "Book chapter",
                   inproceedings: "Conference paper", conference: "Conference paper", book: "Book" };
+  const TIPS = { DOI: "Access via DOI",
+                 IDS: "Publication server of the IDS (free access to some publications)",
+                 Link: "Access via URL" };
   function edSuffix(e) {
     if (e.author || !e.editor) return "";
     return e.editor.split(/\s+and\s+/).length > 1 ? " (Eds.)" : " (Ed.)";
   }
-  const isIds = u => /ids-pub\.bsz/i.test(u || "");
+  const isIds = u => /ids-pub\.bsz|urn:nbn:de:bsz:mh39/i.test(u || "");
   function doiUrl(e) {
     return e.doi ? "https://doi.org/" + e.doi.replace(/^https?:\/\/(dx\.)?doi\.org\//, "") : "";
   }
@@ -224,10 +227,10 @@
     list.innerHTML = hits.length ? [...byYear].map(([year, items]) =>
       `<div class="year"><h3>${esc(year)}</h3><ul>` + items.map(p => {
         const btns = [[p.doi, "DOI"], [p.ids, "IDS"], [p.doi || p.ids ? "" : p.url, "Link"]].filter(b => b[0])
-          .map(([h, l]) => `<a class="btn" href="${esc(h)}" target="_blank" rel="noopener noreferrer">${l}</a>`).join("");
+          .map(([h, l]) => `<a class="btn" href="${esc(h)}" target="_blank" rel="noopener noreferrer" title="${esc(TIPS[l])}">${l}</a>`).join("");
         const typ = p.type ? `<span class="type">${esc(p.type)}</span>` : "";
         const btn = typ || btns ? `<div class="actions">${typ}${btns}</div>` : "";
-        return `<li><span class="title">${esc(p.title)}</span><br><span class="meta">${esc(p.authors)}${p.venue ? (/[.!?]$/.test(p.authors) ? " " : ". ") + esc(p.venue) : ""}</span>${btn}</li>`;
+        return `<li><span class="title">${esc(p.title)}</span><br><span class="meta">${esc(p.authors)}${p.venue ? (/[.!?]$/.test(p.authors) ? " " : ". ") + "<em>" + esc(p.vname) + "</em>" + esc(p.vrest) : ""}</span>${btn}</li>`;
       }).join("") + `</ul></div>`
     ).join("") : `<p class="empty">No publications match your search. Try fewer or different words.</p>`;
     count.textContent = vis.length < hits.length
@@ -240,7 +243,8 @@
     .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
     .then(txt => {
       PUBS = parseBib(txt).map(e => {
-        const p = { year: e.year || "n.d.", title: e.title || e.key, authors: authors(e.author || e.editor) + edSuffix(e), venue: venue(e), type: (!e.author && e.editor) ? "Edited" : (e.etype === "misc" && /blog\s*post/i.test(e.note || "")) ? "Blog post" : (e.etype === "misc" && /material/i.test(e.note || "")) ? "Material" : (TYPES[e.etype] || ""), doi: doiUrl(e), ids: e.idsurl || (isIds(e.url) ? e.url : ""), url: isIds(e.url) ? "" : (e.url || "") };
+        const p = { year: e.year || "n.d.", title: e.title || e.key, authors: authors(e.author || e.editor) + edSuffix(e), vname: venue(e).name, vrest: venue(e).rest, type: (!e.author && e.editor) ? "Edited" : (e.etype === "misc" && /blog\s*post/i.test(e.note || "")) ? "Blog post" : (e.etype === "misc" && /material/i.test(e.note || "")) ? "Material" : (TYPES[e.etype] || ""), doi: doiUrl(e), ids: e.idsurl || (isIds(e.url) ? e.url : ""), url: isIds(e.url) ? "" : (e.url || "") };
+        p.venue = p.vname + p.vrest;
         p.hay = [p.year, p.title, p.authors, p.venue, p.type, e.keywords || ""].join(" ").toLowerCase();
         return p;
       });
