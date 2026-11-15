@@ -41,6 +41,7 @@
   .links a:hover span { text-decoration: underline; text-underline-offset: 3px; }
   .links svg { width: 1.35rem; height: 1.35rem; flex: none; color: var(--accent); }
 
+  .note { color: var(--muted); font-size: .85rem; margin: 0 0 1rem; max-width: 40rem; }
   .search { width: 100%; max-width: 26rem; font: .95rem var(--sans); padding: .55rem .75rem; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 4px; }
   .count { font: .85rem var(--sans); color: var(--muted); margin: .5rem 0 1.5rem; }
   .year { display: grid; grid-template-columns: 4rem minmax(0, 1fr); align-items: baseline; gap: 1rem; padding: 1.1rem 0; border-top: 1px solid var(--line); }
@@ -102,6 +103,7 @@
 
     <section class="pubs" aria-labelledby="pubs">
       <h2 id="pubs">Publications</h2>
+      <p class="note">Most publications are freely available via DOI or the IDS repository. Otherwise, please get in touch.</p>
       <label for="q" hidden>Search publications</label>
       <input id="q" class="search" type="search" placeholder="Search by title, author, venue, year or type" autocomplete="off">
       <p id="count" class="count" aria-live="polite">Loading publications…</p>
@@ -207,7 +209,7 @@
   const TYPES = { article: "Journal article", incollection: "Book chapter", inbook: "Book chapter",
                   inproceedings: "Conference paper", conference: "Conference paper", book: "Book" };
   const TIPS = { DOI: "Access via DOI",
-                 IDS: "Publication server of the IDS (free access to some publications)",
+                 IDS: "Access via IDS repository",
                  Link: "Access via URL" };
   function edSuffix(e) {
     if (e.author || !e.editor) return "";
