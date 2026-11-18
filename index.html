@@ -192,12 +192,16 @@
   function initials(first) {
     return first.split(/[\s-]+/).filter(Boolean).map(p => p[0].toUpperCase() + ".").join(" ");
   }
-  function authors(s) {
-    if (!s) return "";
-    const names = s.split(/\s+and\s+/).map(a => {
+  function surnames(s) {
+    if (!s) return [];
+    return s.split(/\s+and\s+/).map(a => {
       const parts = a.split(",").map(x => x.trim());
       return parts.length > 1 ? parts[0] : a.trim().split(/\s+/).pop();   // surname only
     });
+  }
+  function authors(s) {
+    const names = surnames(s);
+    if (!names.length) return "";
     return names.length > 1 ? names.slice(0, -1).join(", ") + " & " + names[names.length - 1] : names[0];
   }
   function venue(e) {
@@ -222,10 +226,11 @@
 
   /* ---- render ---- */
   let PUBS = [];
+  const yr = p => parseInt(p.year, 10) || 0;   // "n.d." sorts last
   function render() {
     const terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
     const hits = PUBS.filter(p => terms.every(t => p.hay.includes(t)))
-                     .sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
+                     .sort((a, b) => yr(b) - yr(a) || a.akey.localeCompare(b.akey) || a.title.localeCompare(b.title));
     const vis = hits.slice(0, shown);
     const byYear = new Map();
     vis.forEach(p => { if (!byYear.has(p.year)) byYear.set(p.year, []); byYear.get(p.year).push(p); });
@@ -249,6 +254,7 @@
     .then(txt => {
       PUBS = parseBib(txt).map(e => {
         const p = { year: e.year || "n.d.", title: e.title || e.key, authors: authors(e.author || e.editor) + edSuffix(e), vname: venue(e).name, vrest: venue(e).rest, type: (!e.author && e.editor) ? "Edited" : (e.etype === "misc" && /blog\s*post/i.test(e.note || "")) ? "Blog post" : (e.etype === "misc" && /material/i.test(e.note || "")) ? "Material" : (TYPES[e.etype] || ""), doi: doiUrl(e), ids: e.idsurl || (isIds(e.url) ? e.url : ""), url: isIds(e.url) ? "" : (e.url || "") };
+        p.akey = surnames(e.author || e.editor).join("; ");
         p.venue = p.vname + p.vrest;
         p.hay = [p.year, p.title, p.authors, p.venue, p.type, e.keywords || ""].join(" ").toLowerCase();
         return p;
