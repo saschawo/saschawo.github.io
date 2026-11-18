@@ -264,6 +264,18 @@
       render();
     })
     .catch(() => { count.textContent = ""; list.innerHTML = `<p class="empty">Could not load ${BIB_FILE}. Open the page through GitHub Pages or a local web server (not as a local file).</p>`; });
+  /* ---- easter egg: hover over the photo and press a key ---- */
+  (function () {
+    const photo = document.querySelector(".photo");
+    if (!photo) return;
+    const GIF = "Sascha_blob.gif", still = photo.getAttribute("src");
+    let hovering = false;
+    photo.addEventListener("mouseenter", () => { hovering = true; new Image().src = GIF; });   // preload
+    photo.addEventListener("mouseleave", () => { hovering = false; photo.src = still; });
+    document.addEventListener("keydown", e => {
+      if (hovering && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey && photo.getAttribute("src") !== GIF) photo.src = GIF;
+    });
+  })();
   q.addEventListener("input", () => { shown = PAGE; render(); });
   more.addEventListener("click", () => { shown += PAGE; render(); });
 </script>
