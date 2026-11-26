@@ -229,10 +229,18 @@
   /* ---- render ---- */
   let PUBS = [];
   const yr = p => parseInt(p.year, 10) || 0;   // "n.d." sorts last
+  // exact date (BibTeX field "urldate") only decides the order within a year; 0 = no date, sorts last
+  function dateKey(s) {
+    if (!s) return 0;
+    let m = /^(\d{4})(?:-(\d{1,2}))?(?:-(\d{1,2}))?/.exec(s.trim());   // 2026-03-15
+    if (m) return +m[1] * 10000 + (+m[2] || 0) * 100 + (+m[3] || 0);
+    m = /^(\d{1,2})\.(\d{1,2})\.(\d{4})/.exec(s.trim());                // 15.3.2026
+    return m ? +m[3] * 10000 + +m[2] * 100 + +m[1] : 0;
+  }
   function render() {
     const terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
     const hits = PUBS.filter(p => terms.every(t => p.hay.includes(t)))
-                     .sort((a, b) => yr(b) - yr(a) || a.akey.localeCompare(b.akey) || a.title.localeCompare(b.title));
+                     .sort((a, b) => yr(b) - yr(a) || b.dkey - a.dkey || a.akey.localeCompare(b.akey) || a.title.localeCompare(b.title));
     const vis = hits.slice(0, shown);
     const byYear = new Map();
     vis.forEach(p => { if (!byYear.has(p.year)) byYear.set(p.year, []); byYear.get(p.year).push(p); });
@@ -257,6 +265,7 @@
     .then(txt => {
       PUBS = parseBib(txt).map(e => {
         const p = { year: e.year || "n.d.", title: e.title || e.key, authors: authors(e.author || e.editor) + edSuffix(e), vname: venue(e).name, vrest: venue(e).rest, type: (!e.author && e.editor) ? "Edited" : (e.etype === "misc" && /blog\s*post/i.test(e.note || "")) ? "Blog post" : (e.etype === "misc" && /material/i.test(e.note || "")) ? "Material" : (TYPES[e.etype] || ""), doi: doiUrl(e), ids: e.idsurl || (isIds(e.url) ? e.url : ""), url: isIds(e.url) ? "" : (e.url || "") };
+        p.dkey = dateKey(e.urldate);
         p.akey = surnames(e.author || e.editor).join("; ");
         p.venue = p.vname + p.vrest;
         p.hay = [p.year, p.title, p.authors, p.venue, p.type, e.keywords || ""].join(" ").toLowerCase();
